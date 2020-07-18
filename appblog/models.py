@@ -21,10 +21,10 @@ class User(db.Model, UserMixin):
         return s.dumps({'user_id': self.id}).decode('utf-8')
 
     @staticmethod
-    def verify_reset_token(self, token, max_age=3600):
-        s = Serializer(app.config['SECRET_KEY'], 'confirmation')
+    def verify_reset_token(token):
+        s = Serializer(app.config['SECRET_KEY'])
         try:
-            user_id = s.load(token)['user_id']
+            user_id = s.loads(token)['user_id']
         except:
             return None
         return User.query.get(user_id)
