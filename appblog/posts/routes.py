@@ -3,7 +3,7 @@ from flask import (render_template, url_for, flash,
 from flask_login import current_user, login_required
 from appblog import db
 from appblog.models import Post
-from posts.forms import PostForm
+from appblog.posts.forms import PostForm
 
 
 posts = Blueprint('posts', __name__)
@@ -18,7 +18,7 @@ def new_post():
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('main.home'))
     return render_template('create_post.html', title='New Post', form=form, legend='New Post')
 
 
@@ -40,7 +40,7 @@ def update_post(post_id):
         post.content = form.content.data
         db.session.commit()
         flash('Your post has been updated!', 'success')
-        return redirect(url_for('post', post_id=post.id))
+        return redirect(url_for('posts.post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
@@ -56,4 +56,4 @@ def delete_post(post_id):
     db.session.delete(post)
     db.session.commit()
     flash('Your post has been deleted!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
